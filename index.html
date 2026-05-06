@@ -13,7 +13,6 @@
             margin: 0;
             padding: 0;
             font-family: 'Quicksand', sans-serif;
-            /* Fondo con degradado animado */
             background: linear-gradient(135deg, #ffb3c6, #ffc8dd, #ffafcc, #bde0fe);
             background-size: 400% 400%;
             animation: moverFondo 15s ease infinite;
@@ -58,10 +57,10 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 10;
+            z-index: 30;
+            transition: opacity 0.5s;
         }
 
-        /* Botón Principal Animado */
         .btn-principal {
             background: linear-gradient(45deg, #ff4d4d, #ff758c);
             color: white;
@@ -80,7 +79,7 @@
         .btn-principal:hover {
             transform: scale(1.1) translateY(-5px);
             box-shadow: 0 12px 30px rgba(255, 77, 77, 0.7);
-            animation: none; /* Se detiene el latido al pasar el mouse */
+            animation: none;
         }
 
         @keyframes latido {
@@ -89,13 +88,117 @@
             100% { transform: scale(1); }
         }
 
+        /* --- NUEVO: Pantalla de la Carta Animada --- */
+        #pantalla-carta {
+            display: none; /* Oculto al inicio */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 20;
+            transition: opacity 0.8s ease;
+        }
+
+        .carta-contenedor {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .carta-contenedor:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .sobre {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background-color: #ff4d4d;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Tapa del sobre (Triángulo superior) */
+        .sobre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #cc0000;
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out;
+            z-index: 3;
+        }
+
+        /* Sombras para dar volumen al sobre */
+        .sobre-frente {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid #ff3333;
+            z-index: 2;
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* Papel dentro del sobre */
+        .papel {
+            position: absolute;
+            background-color: #fff9fa;
+            width: 260px;
+            height: 160px;
+            top: 20px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 28px;
+            color: #d63031;
+            transition: transform 0.8s ease-in-out;
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* Clases activas para cuando se hace clic en la carta */
+        .carta-contenedor.abierta .sobre::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .carta-contenedor.abierta .papel {
+            transform: translateY(-90px); /* El papel sale un poco hacia arriba */
+        }
+
+        .texto-click {
+            margin-top: 40px;
+            color: #d63031;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            animation: latido 1.5s infinite;
+        }
+
         /* Reproductor de Música */
         #reproductor {
             display: none;
             position: fixed;
             top: 20px;
             left: 20px;
-            /* Efecto Cristal */
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -103,7 +206,7 @@
             border-radius: 15px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.4);
-            z-index: 20;
+            z-index: 40;
         }
 
         .info-cancion {
@@ -150,13 +253,13 @@
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
-            padding-top: 90px; /* Espacio para el reproductor */
+            padding-top: 90px;
             box-sizing: border-box;
+            z-index: 10;
         }
 
         .tarjeta {
             display: none;
-            /* Efecto Cristal para las tarjetas */
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
@@ -169,7 +272,6 @@
             text-align: center;
         }
 
-        /* Animación suave al cambiar de página */
         .tarjeta.activa {
             display: block;
             animation: entrarFlotando 0.8s ease-out forwards;
@@ -180,7 +282,6 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* Imágenes con efecto zoom */
         .contenedor-imagen {
             overflow: hidden;
             border-radius: 15px;
@@ -201,7 +302,6 @@
             transform: scale(1.08);
         }
 
-        /* Textos */
         .tarjeta p {
             font-size: 19px;
             line-height: 1.6;
@@ -217,7 +317,6 @@
             display: block;
         }
 
-        /* Controles de cambio de foto */
         .controles-fotos {
             display: flex;
             justify-content: space-between;
@@ -253,7 +352,6 @@
             transform: none;
         }
         
-        /* Ajuste para celulares */
         @media (max-width: 600px) {
             #reproductor {
                 top: 15px;
@@ -288,7 +386,7 @@
     <!-- Reproductor de Música -->
     <div id="reproductor">
         <div class="info-cancion">
-            🎵 <span><b>Entra en Mi Vida</b></span>
+            🎵 <span><b>Nombre de tu canción aquí</b></span>
         </div>
         <div class="controles-audio">
             <button id="btn-play-pause" class="btn-audio" onclick="pausarReproducir()">⏸️ Pausar</button>
@@ -301,10 +399,20 @@
         <button class="btn-principal" onclick="empezarSorpresa()">Tengo una sorpresa para ti ❤️</button>
     </div>
 
-    <!-- Pantalla 2: La galería de fotos con tu texto -->
+    <!-- Pantalla 2: La Carta Animada -->
+    <div id="pantalla-carta">
+        <div class="carta-contenedor" onclick="abrirCarta()">
+            <div class="sobre">
+                <div class="papel">Para ti...</div>
+                <div class="sobre-frente"></div>
+            </div>
+        </div>
+        <p class="texto-click" id="texto-carta">Toca la carta para abrirla ✨</p>
+    </div>
+
+    <!-- Pantalla 3: La galería de fotos con tu texto -->
     <div id="pantalla-historia">
         
-        <!-- Página 1 -->
         <div class="tarjeta" id="pagina-1">
             <div class="contenedor-imagen">
                 <img src="foto1.jpg" alt="Nuestro primer mes">
@@ -312,7 +420,6 @@
             <p>Hola mi amor,<br><br>Hoy cumplimos nuestro primer mes juntos, y quise escribirte esto porque de verdad has sido algo muy especial en mi vida. En este tiempo me has hecho sentir una felicidad que no esperaba, y cada día contigo se vuelve distinto, mejor.</p>
         </div>
 
-        <!-- Página 2 -->
         <div class="tarjeta" id="pagina-2">
             <div class="contenedor-imagen">
                 <img src="foto2.jpg" alt="Me encanta todo de ti">
@@ -320,7 +427,6 @@
             <p>Me encanta todo de ti, pero más que solo cómo eres por fuera, me encanta tu forma de ser, cómo me haces sentir cuando estoy contigo, tu risa, tus detalles, esas pequeñas cosas que te hacen única.</p>
         </div>
 
-        <!-- Página 3 -->
         <div class="tarjeta" id="pagina-3">
             <div class="contenedor-imagen">
                 <img src="foto3.jpg" alt="Completamente enamorado">
@@ -328,7 +434,6 @@
             <p>Aún así, no puedo negar que tus ojitos, tu sonrisa y tus pequitas me tienen completamente enamorado.<br><br>Quiero que sepas que para mí esto no es algo pasajero...</p>
         </div>
 
-        <!-- Página 4 -->
         <div class="tarjeta" id="pagina-4">
             <div class="contenedor-imagen">
                 <img src="foto4.jpg" alt="Acompañarte en tus sueños">
@@ -336,7 +441,6 @@
             <p>No quiero que sea solo un mes o unos cuantos más... quiero que esto crezca, que sigamos compartiendo momentos, riéndonos juntos y estando el uno para el otro.<br><br>Me hace feliz pensar en acompañarte en tus sueños y verte cumplir cada uno de ellos, porque uno de los míos es justamente ese: verte feliz.</p>
         </div>
 
-        <!-- Página 5 -->
         <div class="tarjeta" id="pagina-5">
             <div class="contenedor-imagen">
                 <img src="foto5.jpg" alt="Te amo con todo mi corazón">
@@ -345,7 +449,6 @@
             <span class="texto-destacado">Te amo con todo mi corazón.</span>
         </div>
 
-        <!-- Controles Inferiores -->
         <div class="controles-fotos">
             <button id="btn-anterior" onclick="cambiarPagina(-1)">◀ Anterior</button>
             <button id="btn-siguiente" onclick="cambiarPagina(1)">Siguiente ▶</button>
@@ -356,27 +459,55 @@
         let paginaActual = 1;
         const totalPaginas = 5;
         let audio = document.getElementById('musicaFondo');
-        
-        // Ajustamos el volumen inicial para que no suene tan fuerte de golpe
         audio.volume = 0.8;
 
+        // Paso 1: Del Botón de inicio a la Carta
         function empezarSorpresa() {
-            // Ocultar inicio con un efecto
             let inicio = document.getElementById('pantalla-inicio');
             inicio.style.opacity = '0';
+            
             setTimeout(() => {
                 inicio.style.display = 'none';
                 
-                // Mostrar lo demás
-                document.getElementById('pantalla-historia').style.display = 'flex';
-                document.getElementById('reproductor').style.display = 'block';
-                mostrarPagina(paginaActual);
+                // Mostramos la carta
+                document.getElementById('pantalla-carta').style.display = 'flex';
                 
+                // Empezamos la música y los corazones de fondo para crear ambiente
                 audio.play();
                 crearCorazones();
-            }, 500); // Espera medio segundo a que se desvanezca
+            }, 500); 
         }
 
+        // Paso 2: Abrir la Carta y pasar a la Historia
+        function abrirCarta() {
+            let contenedor = document.querySelector('.carta-contenedor');
+            
+            // Evitar que haga clic dos veces
+            if(contenedor.classList.contains('abierta')) return; 
+
+            // Añadimos la clase para que haga la animación de abrir
+            contenedor.classList.add('abierta');
+            
+            // Escondemos el texto de "Toca la carta"
+            document.getElementById('texto-carta').style.opacity = '0';
+
+            // Esperamos a que la animación de la carta termine (1.5 segundos) para hacer la transición
+            setTimeout(() => {
+                let pantallaCarta = document.getElementById('pantalla-carta');
+                pantallaCarta.style.opacity = '0'; // Se desvanece la carta
+                
+                setTimeout(() => {
+                    pantallaCarta.style.display = 'none'; // Desaparece por completo
+                    
+                    // Mostramos la galería y el reproductor de música
+                    document.getElementById('pantalla-historia').style.display = 'flex';
+                    document.getElementById('reproductor').style.display = 'block';
+                    mostrarPagina(paginaActual);
+                }, 800);
+            }, 1800); // Tiempo para apreciar cómo sale el papelito
+        }
+
+        // Lógicas de la música
         function pausarReproducir() {
             let btn = document.getElementById('btn-play-pause');
             if (audio.paused) {
@@ -393,13 +524,11 @@
             audio.volume = slider.value;
         }
 
+        // Lógicas de cambio de página
         function cambiarPagina(direccion) {
-            // Primero quitamos la clase activa para que desaparezca
             document.getElementById('pagina-' + paginaActual).classList.remove('activa');
-            
             paginaActual += direccion;
             
-            // Un pequeño retraso para que se note la animación de entrada
             setTimeout(() => {
                 mostrarPagina(paginaActual);
             }, 50);
@@ -413,7 +542,6 @@
             
             document.getElementById('btn-anterior').disabled = (numero === 1);
             
-            // Si llegamos al final, cambiamos el texto del botón
             let btnSiguiente = document.getElementById('btn-siguiente');
             if (numero === totalPaginas) {
                 btnSiguiente.disabled = true;
@@ -424,19 +552,19 @@
             }
         }
 
+        // Animación de los corazones
         function crearCorazones() {
             setInterval(function() {
                 const corazon = document.createElement('div');
                 corazon.classList.add('corazon');
                 
-                // Variamos los emojis de corazones para que se vea más lindo
                 const corazones = ['❤️', '💖', '💕', '✨'];
                 corazon.innerHTML = corazones[Math.floor(Math.random() * corazones.length)];
                 
                 corazon.style.left = Math.random() * 100 + 'vw';
                 corazon.style.fontSize = (Math.random() * 20 + 15) + 'px';
                 
-                let duracion = Math.random() * 4 + 5; // Entre 5 y 9 segundos
+                let duracion = Math.random() * 4 + 5; 
                 
                 if (Math.random() > 0.5) {
                     corazon.style.animation = `flotar-izq ${duracion}s linear forwards`;
