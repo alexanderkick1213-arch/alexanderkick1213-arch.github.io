@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Ajustes base */
+        /* Ajustes base y de celular (iPhone Safari Fix) */
         html, body {
             margin: 0;
             padding: 0;
@@ -15,12 +15,12 @@
             height: 100%;
             height: -webkit-fill-available;
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, #ffb3c6, #ffc8dd, #ffafcc, #bde0fe);
+            background: linear-gradient(135deg, #ffb3c6, #ffc8dd, #ffafcc, #bde0fe, #ffe6f0);
             background-size: 400% 400%;
-            animation: moverFondo 15s ease infinite;
+            animation: moverFondo 18s ease infinite;
             overflow: hidden; 
             color: #4a4a4a;
-            touch-action: pan-y; /* Permite deslizar hacia abajo, nosotros controlamos los lados con JS */
+            touch-action: pan-y; /* Permite scroll vertical en celular */
         }
 
         @keyframes moverFondo {
@@ -29,34 +29,36 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Partículas de fondo */
+        /* --- CORAZONES CAYENDO (Arreglado para que sean visibles) --- */
         .particula {
             position: fixed;
-            z-index: -1;
-            bottom: -10vh;
-            filter: drop-shadow(0 0 8px rgba(255,100,100,0.4));
+            z-index: 5; /* Asegura que estén por encima del fondo pero detrás de las fotos */
+            top: -50px; /* Comienzan justo arriba de la pantalla */
+            filter: drop-shadow(0 0 10px rgba(255,100,100,0.8)); 
             pointer-events: none; 
         }
 
-        @keyframes flotar-izq {
+        @keyframes caer-izq {
             0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(-120vh) translateX(-100px) scale(1.5) rotate(-30deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) translateX(-100px) scale(1.5) rotate(-30deg); opacity: 0; }
         }
 
-        @keyframes flotar-der {
+        @keyframes caer-der {
             0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(-120vh) translateX(100px) scale(1.5) rotate(30deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) translateX(100px) scale(1.5) rotate(30deg); opacity: 0; }
         }
 
-        /* Explosión Final */
+        /* Animación de Explosión para la Pantalla Final */
         .explosion {
             position: fixed;
             top: 50%;
             left: 50%;
             pointer-events: none;
-            z-index: 50;
+            z-index: 60;
             animation: estallar 2s ease-out forwards;
         }
 
@@ -65,7 +67,8 @@
             100% { transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rot)); opacity: 0; }
         }
 
-        #pantalla-inicio, #pantalla-carta {
+        /* Contenedores de Pantallas */
+        #pantalla-inicio, #pantalla-carta, #pantalla-final {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -85,6 +88,32 @@
             transition: opacity 0.8s ease;
         }
 
+        /* --- PANTALLA FINAL SORPRESA --- */
+        #pantalla-final {
+            display: none;
+            z-index: 50; 
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .texto-final {
+            font-family: 'Dancing Script', cursive;
+            font-size: 55px; 
+            color: #d63031;
+            text-align: center;
+            line-height: 1.3;
+            padding: 20px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 0 0 25px rgba(255, 77, 77, 0.6);
+            animation: brillarLatir 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes brillarLatir {
+            0% { transform: scale(0.95); text-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 0 0 25px rgba(255, 77, 77, 0.5); }
+            100% { transform: scale(1.05); text-shadow: 0 0 25px rgba(255, 255, 255, 1), 0 0 45px #ff4d4d; }
+        }
+
+        /* Botón Principal Animado */
         .btn-principal {
             background: linear-gradient(45deg, #ff4d4d, #ff758c);
             color: white;
@@ -95,7 +124,7 @@
             font-weight: 700;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(255, 77, 77, 0.5);
+            box-shadow: 0 10px 30px rgba(255, 77, 77, 0.6), 0 0 15px rgba(255, 120, 120, 0.3);
             animation: latido 1.5s infinite;
             -webkit-tap-highlight-color: transparent; 
         }
@@ -106,7 +135,7 @@
             100% { transform: scale(1); }
         }
 
-        /* Sobre Estético */
+        /* Sobre Estético con sello y animación */
         .carta-contenedor {
             position: relative;
             cursor: pointer;
@@ -119,7 +148,7 @@
             height: 180px;
             background: linear-gradient(135deg, #ff4d4d, #e60000);
             border-radius: 10px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.35);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -138,7 +167,7 @@
             transform-origin: top;
             transition: transform 0.6s ease-in-out;
             z-index: 3;
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 3px 4px rgba(0,0,0,0.3));
         }
 
         .sobre-frente {
@@ -161,7 +190,7 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 35px;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
             transition: opacity 0.3s ease;
         }
 
@@ -202,13 +231,14 @@
             font-weight: 700;
             font-size: 18px;
             animation: latido 1.5s infinite;
-            background: rgba(255,255,255,0.6);
-            padding: 8px 20px;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
+            background: rgba(255,255,255,0.7);
+            padding: 10px 25px;
+            border-radius: 25px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.1);
         }
 
-        /* Reproductor */
+        /* Reproductor de Música */
         #reproductor {
             display: none;
             position: fixed;
@@ -217,14 +247,14 @@
             transform: translateX(-50%);
             width: 85%;
             max-width: 320px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             padding: 12px;
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(255, 77, 77, 0.15);
+            box-shadow: 0 10px 35px rgba(255, 77, 77, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            z-index: 40;
+            z-index: 50; /* Aumentado para que no se oculte */
             text-align: center;
             box-sizing: border-box;
         }
@@ -251,14 +281,16 @@
             border-radius: 12px;
             font-family: 'Quicksand', sans-serif;
             font-weight: 700;
+            cursor: pointer;
         }
 
         input[type="range"] {
             width: 90px;
             accent-color: #ff4d4d;
+            cursor: pointer;
         }
 
-        /* Pantalla Historia */
+        /* Pantalla Historia / Galería */
         #pantalla-historia {
             display: none;
             flex-direction: column;
@@ -273,43 +305,66 @@
             z-index: 10;
             overflow-y: auto; 
             overflow-x: hidden;
-            -webkit-overflow-scrolling: touch; 
+            -webkit-overflow-scrolling: touch; /* Suavidad en iPhone */
+            perspective: 1500px; 
+        }
+
+        /* Scrollbar personalizado para celular/pc */
+        #pantalla-historia::-webkit-scrollbar {
+            width: 8px; 
+        }
+        #pantalla-historia::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.2); 
+            border-radius: 10px;
+        }
+        #pantalla-historia::-webkit-scrollbar-thumb {
+            background: rgba(255, 77, 77, 0.5); 
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .tarjeta {
             display: none;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             padding: 25px 20px;
             border-radius: 25px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255, 255, 255, 0.7);
             width: 100%;
             max-width: 420px;
             text-align: center;
             box-sizing: border-box;
             margin-bottom: 25px; 
+            transform-style: preserve-3d; 
         }
 
         .tarjeta.activa {
             display: block;
-            animation: entrarFlotando 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: entrarFlotando 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
         }
 
         @keyframes entrarFlotando {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from { 
+                opacity: 0; 
+                transform: translateY(40px) scale(0.9) rotateY(-15deg); 
+            } 
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1) rotateY(0deg); 
+            } 
         }
 
+        /* Marco de foto tipo Polaroid */
         .contenedor-polaroid {
             background: #ffffff;
             padding: 12px 12px 40px 12px; 
             border-radius: 4px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
             margin-bottom: 25px;
             transform: rotate(-2deg); 
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
         }
 
         #pagina-2 .contenedor-polaroid, 
@@ -323,24 +378,24 @@
             object-fit: cover;
             display: block;
             border-radius: 2px;
-            border: 1px solid #f0f0f0;
+            border: 1px solid #f2f2f2;
         }
 
-        /* --- NUEVO: Indicador de Deslizar (Swipe) --- */
+        /* Indicador animado de Swipe para celular */
         .indicador-swipe {
-            display: none; /* Por defecto oculto para PC */
+            display: none; 
             margin: -15px auto 15px auto;
-            background: rgba(255, 77, 77, 0.1);
+            background: rgba(255, 77, 77, 0.12);
             color: #d63031;
-            padding: 6px 18px;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 25px;
             font-size: 14px;
             font-weight: 700;
             width: fit-content;
             animation: animDeslizar 2s infinite ease-in-out;
+            box-shadow: 0 3px 10px rgba(255, 77, 77, 0.1);
         }
 
-        /* Solo se muestra en pantallas de celular */
         @media (max-width: 767px) {
             .indicador-swipe { display: block; }
         }
@@ -350,7 +405,6 @@
             50% { transform: translateX(-15px); }
         }
 
-        /* Tipografía del texto */
         .tarjeta p {
             font-size: 16.5px; 
             line-height: 1.6;
@@ -361,14 +415,13 @@
 
         .texto-destacado {
             font-family: 'Dancing Script', cursive;
-            font-size: 30px;
+            font-size: 32px;
             color: #d63031;
             margin-top: 15px;
             display: block;
-            text-shadow: 1px 1px 2px rgba(255, 200, 200, 0.5);
+            text-shadow: 1px 1px 3px rgba(255, 200, 200, 0.6);
         }
 
-        /* Botones (Los dejamos por si ella prefiere hacer clic) */
         .controles-fotos {
             display: flex;
             justify-content: space-between;
@@ -382,36 +435,49 @@
             background: linear-gradient(135deg, #ff758c, #ff4d4d);
             color: white;
             border: none;
-            padding: 15px 20px;
+            padding: 16px 20px;
             font-size: 16px;
             font-family: 'Quicksand', sans-serif;
             font-weight: 700;
             border-radius: 30px;
             flex: 1; 
             -webkit-tap-highlight-color: transparent;
-            box-shadow: 0 6px 20px rgba(255, 77, 77, 0.4);
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 77, 77, 0.5), 0 0 10px rgba(255, 120, 120, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .controles-fotos button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 77, 77, 0.7), 0 0 15px rgba(255, 120, 120, 0.3);
         }
 
         .controles-fotos button:disabled {
             background: #ffcccc;
             color: #fff;
             box-shadow: none;
+            cursor: not-allowed;
         }
         
-        /* Ajustes para PC */
+        /* Ajustes específicos para PC */
         @media (min-width: 768px) {
-            #pantalla-historia { justify-content: center; padding-top: 30px; padding-bottom: 30px; }
-            .tarjeta { max-width: 580px; padding: 35px; }
-            .contenedor-polaroid img { height: 380px; }
+            #pantalla-historia {
+                justify-content: center;
+                padding-top: 30px;
+                padding-bottom: 30px;
+            }
+            .tarjeta { max-width: 600px; padding: 40px; }
+            .contenedor-polaroid img { height: 400px; }
             .tarjeta p { font-size: 20px; }
-            .sobre { width: 320px; height: 210px; }
-            .sobre::before { border-left-width: 160px; border-right-width: 160px; border-top-width: 110px; }
-            .sobre-frente { border-left-width: 160px; border-right-width: 160px; border-bottom-width: 110px; }
-            .sello-corazon { top: 90px; font-size: 40px; }
-            .papel { width: 280px; height: 170px; font-size: 32px; }
+            .sobre { width: 340px; height: 220px; }
+            .sobre::before { border-left-width: 170px; border-right-width: 170px; border-top-width: 115px; }
+            .sobre-frente { border-left-width: 170px; border-right-width: 170px; border-bottom-width: 115px; }
+            .sello-corazon { top: 95px; font-size: 40px; }
+            .papel { width: 300px; height: 180px; font-size: 32px; }
             #reproductor { top: 25px; left: 25px; transform: none; width: auto; max-width: none; text-align: left; }
             .controles-audio { justify-content: flex-start; }
-            .controles-fotos { max-width: 580px; margin-bottom: 0; }
+            .controles-fotos { max-width: 600px; margin-bottom: 0; }
+            .texto-final { font-size: 80px; }
         }
     </style>
 </head>
@@ -495,14 +561,18 @@
         </div>
     </div>
 
+    <div id="pantalla-final">
+        <h1 class="texto-final">Gracias por todo<br>Amor de mi vida!</h1>
+    </div>
+
     <script>
         let paginaActual = 1;
         const totalPaginas = 5;
         let audio = document.getElementById('musicaFondo');
-        let explosionRealizada = false; 
+        let explosionIntervalo;
         audio.volume = 0.8;
 
-        /* --- LÓGICA PARA DETECTAR EL DESLIZAR (SWIPE) DEL DEDO --- */
+        /* --- DETECTAR EL SWIPE (DESLIZAR DEDO EN CELULAR) --- */
         let touchstartX = 0;
         let touchendX = 0;
         let touchstartY = 0;
@@ -510,13 +580,11 @@
 
         const zonaHistoria = document.getElementById('pantalla-historia');
 
-        // Cuando ella pone el dedo en la pantalla
         zonaHistoria.addEventListener('touchstart', function(event) {
             touchstartX = event.changedTouches[0].screenX;
             touchstartY = event.changedTouches[0].screenY;
         }, {passive: true});
 
-        // Cuando levanta el dedo
         zonaHistoria.addEventListener('touchend', function(event) {
             touchendX = event.changedTouches[0].screenX;
             touchendY = event.changedTouches[0].screenY;
@@ -527,19 +595,19 @@
             let difX = touchstartX - touchendX;
             let difY = touchstartY - touchendY;
 
-            // Verificamos que el deslizamiento sea más horizontal que vertical (para no molestar al bajar a leer) y que haya deslizado al menos 50px
-            if (Math.abs(difX) > Math.abs(difY) && Math.abs(difX) > 50) {
+            // Aseguramos que se deslizó más hacia los lados que hacia arriba/abajo
+            if (Math.abs(difX) > Math.abs(difY) && Math.abs(difX) > 60) {
                 if (difX > 0) { 
-                    // Deslizó hacia la izquierda (Siguiente)
-                    if (paginaActual < totalPaginas) cambiarPagina(1);
+                    // Deslizar a la izquierda (Avanzar)
+                    cambiarPagina(1);
                 } else { 
-                    // Deslizó hacia la derecha (Anterior)
+                    // Deslizar a la derecha (Retroceder)
                     if (paginaActual > 1) cambiarPagina(-1);
                 }
             }
         }
-        /* -------------------------------------------------------- */
 
+        /* --- FUNCIONES PRINCIPALES --- */
         function empezarSorpresa() {
             let inicio = document.getElementById('pantalla-inicio');
             inicio.style.opacity = '0';
@@ -548,6 +616,7 @@
                 inicio.style.display = 'none';
                 document.getElementById('pantalla-carta').style.display = 'flex';
                 audio.play().catch(e => console.log("Audio en espera"));
+                // Iniciamos la lluvia de corazones desde el principio
                 crearFondoMagico();
             }, 400); 
         }
@@ -589,6 +658,12 @@
         }
 
         function cambiarPagina(direccion) {
+            // Si estamos en la última página y presiona siguiente o desliza, mostramos el final
+            if (paginaActual === totalPaginas && direccion === 1) {
+                mostrarPantallaFinal();
+                return;
+            }
+
             document.getElementById('pagina-' + paginaActual).classList.remove('activa');
             paginaActual += direccion;
             
@@ -603,8 +678,8 @@
             }
             document.getElementById('pagina-' + numero).classList.add('activa');
             
-            // Ocultar el indicador de "Deslizar" si ya pasamos de la primera página
-            if(numero !== 1) {
+            // Oculta el cartel "Desliza" al avanzar
+            if(numero !== 1 && document.getElementById('indicador-movil')) {
                 document.getElementById('indicador-movil').style.display = 'none';
             }
             
@@ -612,21 +687,36 @@
             
             let btnSiguiente = document.getElementById('btn-siguiente');
             if (numero === totalPaginas) {
-                btnSiguiente.disabled = true;
-                btnSiguiente.innerHTML = 'Fin ❤️';
-                
-                if(!explosionRealizada) {
-                    crearExplosionFinal();
-                    explosionRealizada = true;
-                }
+                btnSiguiente.innerHTML = 'Ver Sorpresa Final ✨';
             } else {
-                btnSiguiente.disabled = false;
                 btnSiguiente.innerHTML = 'Siguiente ▶';
             }
             
+            // Regresa la tarjeta hacia arriba
             document.getElementById('pantalla-historia').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        /* --- PANTALLA FINAL --- */
+        function mostrarPantallaFinal() {
+            document.getElementById('pantalla-historia').style.opacity = '0';
+            
+            setTimeout(() => {
+                document.getElementById('pantalla-historia').style.display = 'none';
+                
+                let final = document.getElementById('pantalla-final');
+                final.style.display = 'flex';
+                final.style.opacity = '0';
+                
+                setTimeout(() => {
+                    final.style.opacity = '1';
+                    // Activa las explosiones para que celebren en la pantalla
+                    crearExplosionFinal();
+                    explosionIntervalo = setInterval(crearExplosionFinal, 2500);
+                }, 100);
+            }, 500);
+        }
+
+        /* --- ANIMACIONES DE CORAZONES (Ahora cayendo) --- */
         function crearFondoMagico() {
             setInterval(function() {
                 const particula = document.createElement('div');
@@ -636,14 +726,15 @@
                 particula.innerHTML = elementos[Math.floor(Math.random() * elementos.length)];
                 
                 particula.style.left = Math.random() * 100 + 'vw';
-                particula.style.fontSize = (Math.random() * 15 + 12) + 'px';
+                particula.style.fontSize = (Math.random() * 18 + 14) + 'px'; 
                 
-                let duracion = Math.random() * 5 + 6; 
+                let duracion = Math.random() * 5 + 7; 
                 
+                // Caen con las animaciones corregidas
                 if (Math.random() > 0.5) {
-                    particula.style.animation = `flotar-izq ${duracion}s linear forwards`;
+                    particula.style.animation = `caer-izq ${duracion}s linear forwards`;
                 } else {
-                    particula.style.animation = `flotar-der ${duracion}s linear forwards`;
+                    particula.style.animation = `caer-der ${duracion}s linear forwards`;
                 }
                 
                 document.body.appendChild(particula);
@@ -651,7 +742,7 @@
                 setTimeout(() => {
                     particula.remove();
                 }, duracion * 1000);
-            }, 350); 
+            }, 380); 
         }
 
         function crearExplosionFinal() {
@@ -662,7 +753,7 @@
                     c.innerHTML = Math.random() > 0.5 ? '❤️' : '✨';
                     
                     let angulo = Math.random() * Math.PI * 2;
-                    let distancia = Math.random() * 200 + 50; 
+                    let distancia = Math.random() * 250 + 60; 
                     let tx = Math.cos(angulo) * distancia + 'px';
                     let ty = Math.sin(angulo) * distancia + 'px';
                     let rot = Math.random() * 360 + 'deg';
@@ -670,12 +761,12 @@
                     c.style.setProperty('--tx', tx);
                     c.style.setProperty('--ty', ty);
                     c.style.setProperty('--rot', rot);
-                    c.style.fontSize = (Math.random() * 25 + 15) + 'px';
+                    c.style.fontSize = (Math.random() * 28 + 18) + 'px';
 
-                    document.body.appendChild(c);
+                    document.getElementById('pantalla-final').appendChild(c);
 
                     setTimeout(() => c.remove(), 2000);
-                }, i * 30); 
+                }, i * 20); 
             }
         }
     </script>
