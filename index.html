@@ -4,22 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Feliz Primer Mes Mi Amor ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Ajuste crucial para Safari en iOS */
+        /* Ajustes base */
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            height: -webkit-fill-available; /* Truco de oro para Safari iOS */
+            height: -webkit-fill-available;
             font-family: 'Quicksand', sans-serif;
             background: linear-gradient(135deg, #ffb3c6, #ffc8dd, #ffafcc, #bde0fe);
             background-size: 400% 400%;
             animation: moverFondo 15s ease infinite;
             overflow: hidden; 
-            color: #333;
+            color: #4a4a4a;
+            touch-action: pan-y; /* Permite deslizar hacia abajo, nosotros controlamos los lados con JS */
         }
 
         @keyframes moverFondo {
@@ -28,25 +29,40 @@
             100% { background-position: 0% 50%; }
         }
 
-        .corazon {
+        /* Partículas de fondo */
+        .particula {
             position: fixed;
-            color: rgba(255, 77, 77, 0.8);
             z-index: -1;
             bottom: -10vh;
-            filter: drop-shadow(0 0 5px rgba(255,0,0,0.3));
+            filter: drop-shadow(0 0 8px rgba(255,100,100,0.4));
             pointer-events: none; 
         }
 
         @keyframes flotar-izq {
             0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
             20% { opacity: 1; }
-            100% { transform: translateY(-120vh) translateX(-80px) scale(1.5) rotate(-20deg); opacity: 0; }
+            100% { transform: translateY(-120vh) translateX(-100px) scale(1.5) rotate(-30deg); opacity: 0; }
         }
 
         @keyframes flotar-der {
             0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
             20% { opacity: 1; }
-            100% { transform: translateY(-120vh) translateX(80px) scale(1.5) rotate(20deg); opacity: 0; }
+            100% { transform: translateY(-120vh) translateX(100px) scale(1.5) rotate(30deg); opacity: 0; }
+        }
+
+        /* Explosión Final */
+        .explosion {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            pointer-events: none;
+            z-index: 50;
+            animation: estallar 2s ease-out forwards;
+        }
+
+        @keyframes estallar {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rot)); opacity: 0; }
         }
 
         #pantalla-inicio, #pantalla-carta {
@@ -76,7 +92,7 @@
             padding: 18px 35px;
             font-size: 20px;
             font-family: 'Quicksand', sans-serif;
-            font-weight: 600;
+            font-weight: 700;
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 8px 25px rgba(255, 77, 77, 0.5);
@@ -90,6 +106,7 @@
             100% { transform: scale(1); }
         }
 
+        /* Sobre Estético */
         .carta-contenedor {
             position: relative;
             cursor: pointer;
@@ -100,9 +117,9 @@
             position: relative;
             width: 280px; 
             height: 180px;
-            background-color: #ff4d4d;
+            background: linear-gradient(135deg, #ff4d4d, #e60000);
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -121,6 +138,7 @@
             transform-origin: top;
             transition: transform 0.6s ease-in-out;
             z-index: 3;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
         }
 
         .sobre-frente {
@@ -136,6 +154,17 @@
             border-radius: 0 0 10px 10px;
         }
 
+        .sello-corazon {
+            position: absolute;
+            z-index: 4;
+            top: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 35px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            transition: opacity 0.3s ease;
+        }
+
         .papel {
             position: absolute;
             background-color: #fff9fa;
@@ -147,7 +176,7 @@
             justify-content: center;
             align-items: center;
             font-family: 'Dancing Script', cursive;
-            font-size: 26px;
+            font-size: 28px;
             color: #d63031;
             transition: transform 0.8s ease-in-out;
             z-index: 1;
@@ -159,18 +188,27 @@
             z-index: 0;
         }
 
+        .carta-contenedor.abierta .sello-corazon {
+            opacity: 0;
+        }
+
         .carta-contenedor.abierta .papel {
             transform: translateY(-80px);
         }
 
         .texto-click {
-            margin-top: 40px;
+            margin-top: 50px;
             color: #d63031;
-            font-weight: bold;
+            font-weight: 700;
             font-size: 18px;
             animation: latido 1.5s infinite;
+            background: rgba(255,255,255,0.6);
+            padding: 8px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
         }
 
+        /* Reproductor */
         #reproductor {
             display: none;
             position: fixed;
@@ -179,13 +217,13 @@
             transform: translateX(-50%);
             width: 85%;
             max-width: 320px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 10px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 12px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(255, 77, 77, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             z-index: 40;
             text-align: center;
             box-sizing: border-box;
@@ -193,153 +231,187 @@
 
         .info-cancion {
             color: #d63031;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 8px;
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .controles-audio {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .btn-audio {
             background-color: #ff758c;
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 10px;
+            padding: 6px 14px;
+            border-radius: 12px;
             font-family: 'Quicksand', sans-serif;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         input[type="range"] {
-            width: 80px;
+            width: 90px;
             accent-color: #ff4d4d;
         }
 
-        /* Pantalla Historia - AHORA PERMITE SCROLL */
+        /* Pantalla Historia */
         #pantalla-historia {
             display: none;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Para que empiece desde arriba y baje */
+            justify-content: flex-start; 
             height: 100%;
             width: 100%;
             padding: 15px;
-            padding-top: 110px; /* Espacio para el reproductor */
-            padding-bottom: 100px; /* Cojín gigante abajo para la barra de iPhone */
+            padding-top: 120px; 
+            padding-bottom: 120px; 
             box-sizing: border-box;
             z-index: 10;
-            overflow-y: auto; /* Permite deslizar hacia abajo */
+            overflow-y: auto; 
             overflow-x: hidden;
-            -webkit-overflow-scrolling: touch; /* Scroll suave en iPhone */
+            -webkit-overflow-scrolling: touch; 
         }
 
         .tarjeta {
             display: none;
             background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 25px 20px;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             text-align: center;
             box-sizing: border-box;
-            margin-bottom: 20px; /* Espacio entre tarjeta y botones */
+            margin-bottom: 25px; 
         }
 
         .tarjeta.activa {
             display: block;
-            animation: entrarFlotando 0.6s ease-out forwards;
+            animation: entrarFlotando 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
         @keyframes entrarFlotando {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .contenedor-imagen {
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border: 3px solid white;
-            overflow: hidden;
+        .contenedor-polaroid {
+            background: #ffffff;
+            padding: 12px 12px 40px 12px; 
+            border-radius: 4px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin-bottom: 25px;
+            transform: rotate(-2deg); 
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
 
-        .tarjeta img {
+        #pagina-2 .contenedor-polaroid, 
+        #pagina-4 .contenedor-polaroid {
+            transform: rotate(2deg);
+        }
+
+        .contenedor-polaroid img {
             width: 100%;
-            height: 190px; /* Imagen un poco más pequeña para ahorrar espacio */
+            height: 200px; 
             object-fit: cover;
             display: block;
+            border-radius: 2px;
+            border: 1px solid #f0f0f0;
         }
 
+        /* --- NUEVO: Indicador de Deslizar (Swipe) --- */
+        .indicador-swipe {
+            display: none; /* Por defecto oculto para PC */
+            margin: -15px auto 15px auto;
+            background: rgba(255, 77, 77, 0.1);
+            color: #d63031;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            width: fit-content;
+            animation: animDeslizar 2s infinite ease-in-out;
+        }
+
+        /* Solo se muestra en pantallas de celular */
+        @media (max-width: 767px) {
+            .indicador-swipe { display: block; }
+        }
+
+        @keyframes animDeslizar {
+            0%, 100% { transform: translateX(5px); }
+            50% { transform: translateX(-15px); }
+        }
+
+        /* Tipografía del texto */
         .tarjeta p {
-            font-size: 16px; 
-            line-height: 1.5;
-            margin-bottom: 10px;
-            color: #444;
+            font-size: 16.5px; 
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #555;
+            font-weight: 600;
         }
 
         .texto-destacado {
             font-family: 'Dancing Script', cursive;
-            font-size: 26px;
+            font-size: 30px;
             color: #d63031;
-            margin-top: 10px;
+            margin-top: 15px;
             display: block;
+            text-shadow: 1px 1px 2px rgba(255, 200, 200, 0.5);
         }
 
+        /* Botones (Los dejamos por si ella prefiere hacer clic) */
         .controles-fotos {
             display: flex;
             justify-content: space-between;
             width: 100%;
-            max-width: 400px;
-            gap: 10px;
-            margin-bottom: 40px; /* Extra espacio abajo */
+            max-width: 420px;
+            gap: 15px;
+            margin-bottom: 50px; 
         }
 
         .controles-fotos button {
-            background: linear-gradient(45deg, #ff758c, #ff4d4d);
+            background: linear-gradient(135deg, #ff758c, #ff4d4d);
             color: white;
             border: none;
-            padding: 14px 20px;
+            padding: 15px 20px;
             font-size: 16px;
             font-family: 'Quicksand', sans-serif;
-            font-weight: 600;
-            border-radius: 25px;
+            font-weight: 700;
+            border-radius: 30px;
             flex: 1; 
             -webkit-tap-highlight-color: transparent;
-            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+            box-shadow: 0 6px 20px rgba(255, 77, 77, 0.4);
         }
 
         .controles-fotos button:disabled {
             background: #ffcccc;
             color: #fff;
-            opacity: 0.7;
             box-shadow: none;
         }
         
         /* Ajustes para PC */
         @media (min-width: 768px) {
-            #pantalla-historia {
-                justify-content: center;
-                padding-top: 20px;
-                padding-bottom: 20px;
-            }
-            .tarjeta { max-width: 550px; padding: 25px; }
-            .tarjeta img { height: 350px; }
-            .tarjeta p { font-size: 19px; }
-            .sobre { width: 300px; height: 200px; }
-            .sobre::before { border-left-width: 150px; border-right-width: 150px; border-top-width: 100px; }
-            .sobre-frente { border-left-width: 150px; border-right-width: 150px; border-bottom-width: 100px; }
-            .papel { width: 260px; height: 160px; }
-            #reproductor { top: 20px; left: 20px; transform: none; width: auto; max-width: none; text-align: left; }
+            #pantalla-historia { justify-content: center; padding-top: 30px; padding-bottom: 30px; }
+            .tarjeta { max-width: 580px; padding: 35px; }
+            .contenedor-polaroid img { height: 380px; }
+            .tarjeta p { font-size: 20px; }
+            .sobre { width: 320px; height: 210px; }
+            .sobre::before { border-left-width: 160px; border-right-width: 160px; border-top-width: 110px; }
+            .sobre-frente { border-left-width: 160px; border-right-width: 160px; border-bottom-width: 110px; }
+            .sello-corazon { top: 90px; font-size: 40px; }
+            .papel { width: 280px; height: 170px; font-size: 32px; }
+            #reproductor { top: 25px; left: 25px; transform: none; width: auto; max-width: none; text-align: left; }
             .controles-audio { justify-content: flex-start; }
-            .controles-fotos { max-width: 550px; margin-bottom: 0; }
+            .controles-fotos { max-width: 580px; margin-bottom: 0; }
         }
     </style>
 </head>
@@ -366,6 +438,7 @@
     <div id="pantalla-carta">
         <div class="carta-contenedor" onclick="abrirCarta()">
             <div class="sobre">
+                <div class="sello-corazon">❤️</div>
                 <div class="papel">Para ti...</div>
                 <div class="sobre-frente"></div>
             </div>
@@ -376,35 +449,40 @@
     <div id="pantalla-historia">
         
         <div class="tarjeta" id="pagina-1">
-            <div class="contenedor-imagen">
+            <div class="contenedor-polaroid">
                 <img src="foto1.jpg" alt="Nuestro primer mes">
             </div>
+            
+            <div id="indicador-movil" class="indicador-swipe">
+                👈 Desliza para avanzar
+            </div>
+
             <p>Hola mi amor,<br><br>Hoy cumplimos nuestro primer mes juntos, y quise escribirte esto porque de verdad has sido algo muy especial en mi vida. En este tiempo me has hecho sentir una felicidad que no esperaba, y cada día contigo se vuelve distinto, mejor.</p>
         </div>
 
         <div class="tarjeta" id="pagina-2">
-            <div class="contenedor-imagen">
+            <div class="contenedor-polaroid">
                 <img src="foto2.jpg" alt="Me encanta todo de ti">
             </div>
             <p>Me encanta todo de ti, pero más que solo cómo eres por fuera, me encanta tu forma de ser, cómo me haces sentir cuando estoy contigo, tu risa, tus detalles, esas pequeñas cosas que te hacen única.</p>
         </div>
 
         <div class="tarjeta" id="pagina-3">
-            <div class="contenedor-imagen">
+            <div class="contenedor-polaroid">
                 <img src="foto3.jpg" alt="Completamente enamorado">
             </div>
             <p>Aún así, no puedo negar que tus ojitos, tu sonrisa y tus pequitas me tienen completamente enamorado.<br><br>Quiero que sepas que para mí esto no es algo pasajero...</p>
         </div>
 
         <div class="tarjeta" id="pagina-4">
-            <div class="contenedor-imagen">
+            <div class="contenedor-polaroid">
                 <img src="foto4.jpg" alt="Acompañarte en tus sueños">
             </div>
             <p>No quiero que sea solo un mes o unos cuantos más... quiero que esto crezca, que sigamos compartiendo momentos, riéndonos juntos y estando el uno para el otro.<br><br>Me hace feliz pensar en acompañarte en tus sueños y verte cumplir cada uno de ellos, porque uno de los míos es justamente ese: verte feliz.</p>
         </div>
 
         <div class="tarjeta" id="pagina-5">
-            <div class="contenedor-imagen">
+            <div class="contenedor-polaroid">
                 <img src="foto5.jpg" alt="Te amo con todo mi corazón">
             </div>
             <p>Gracias por este primer mes, por cada momento y por todo lo que hemos vivido hasta ahora. De verdad espero que esto siga creciendo y que vengan muchos meses más a tu lado.</p>
@@ -421,7 +499,46 @@
         let paginaActual = 1;
         const totalPaginas = 5;
         let audio = document.getElementById('musicaFondo');
+        let explosionRealizada = false; 
         audio.volume = 0.8;
+
+        /* --- LÓGICA PARA DETECTAR EL DESLIZAR (SWIPE) DEL DEDO --- */
+        let touchstartX = 0;
+        let touchendX = 0;
+        let touchstartY = 0;
+        let touchendY = 0;
+
+        const zonaHistoria = document.getElementById('pantalla-historia');
+
+        // Cuando ella pone el dedo en la pantalla
+        zonaHistoria.addEventListener('touchstart', function(event) {
+            touchstartX = event.changedTouches[0].screenX;
+            touchstartY = event.changedTouches[0].screenY;
+        }, {passive: true});
+
+        // Cuando levanta el dedo
+        zonaHistoria.addEventListener('touchend', function(event) {
+            touchendX = event.changedTouches[0].screenX;
+            touchendY = event.changedTouches[0].screenY;
+            manejarSwipe();
+        }, {passive: true});
+
+        function manejarSwipe() {
+            let difX = touchstartX - touchendX;
+            let difY = touchstartY - touchendY;
+
+            // Verificamos que el deslizamiento sea más horizontal que vertical (para no molestar al bajar a leer) y que haya deslizado al menos 50px
+            if (Math.abs(difX) > Math.abs(difY) && Math.abs(difX) > 50) {
+                if (difX > 0) { 
+                    // Deslizó hacia la izquierda (Siguiente)
+                    if (paginaActual < totalPaginas) cambiarPagina(1);
+                } else { 
+                    // Deslizó hacia la derecha (Anterior)
+                    if (paginaActual > 1) cambiarPagina(-1);
+                }
+            }
+        }
+        /* -------------------------------------------------------- */
 
         function empezarSorpresa() {
             let inicio = document.getElementById('pantalla-inicio');
@@ -430,9 +547,8 @@
             setTimeout(() => {
                 inicio.style.display = 'none';
                 document.getElementById('pantalla-carta').style.display = 'flex';
-                
-                audio.play().catch(e => console.log("Audio en espera de interacción"));
-                crearCorazones();
+                audio.play().catch(e => console.log("Audio en espera"));
+                crearFondoMagico();
             }, 400); 
         }
 
@@ -453,7 +569,7 @@
                     document.getElementById('reproductor').style.display = 'block';
                     mostrarPagina(paginaActual);
                 }, 600);
-            }, 1600); 
+            }, 1800); 
         }
 
         function pausarReproducir() {
@@ -487,46 +603,80 @@
             }
             document.getElementById('pagina-' + numero).classList.add('activa');
             
+            // Ocultar el indicador de "Deslizar" si ya pasamos de la primera página
+            if(numero !== 1) {
+                document.getElementById('indicador-movil').style.display = 'none';
+            }
+            
             document.getElementById('btn-anterior').disabled = (numero === 1);
             
             let btnSiguiente = document.getElementById('btn-siguiente');
             if (numero === totalPaginas) {
                 btnSiguiente.disabled = true;
                 btnSiguiente.innerHTML = 'Fin ❤️';
+                
+                if(!explosionRealizada) {
+                    crearExplosionFinal();
+                    explosionRealizada = true;
+                }
             } else {
                 btnSiguiente.disabled = false;
                 btnSiguiente.innerHTML = 'Siguiente ▶';
             }
             
-            // Subir el scroll de la página al cambiar de foto
             document.getElementById('pantalla-historia').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function crearCorazones() {
+        function crearFondoMagico() {
             setInterval(function() {
-                const corazon = document.createElement('div');
-                corazon.classList.add('corazon');
+                const particula = document.createElement('div');
+                particula.classList.add('particula');
                 
-                const corazones = ['❤️', '💖', '💕', '✨'];
-                corazon.innerHTML = corazones[Math.floor(Math.random() * corazones.length)];
+                const elementos = ['❤️', '💖', '✨', '🌟', '💕'];
+                particula.innerHTML = elementos[Math.floor(Math.random() * elementos.length)];
                 
-                corazon.style.left = Math.random() * 100 + 'vw';
-                corazon.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                particula.style.left = Math.random() * 100 + 'vw';
+                particula.style.fontSize = (Math.random() * 15 + 12) + 'px';
                 
-                let duracion = Math.random() * 4 + 5; 
+                let duracion = Math.random() * 5 + 6; 
                 
                 if (Math.random() > 0.5) {
-                    corazon.style.animation = `flotar-izq ${duracion}s linear forwards`;
+                    particula.style.animation = `flotar-izq ${duracion}s linear forwards`;
                 } else {
-                    corazon.style.animation = `flotar-der ${duracion}s linear forwards`;
+                    particula.style.animation = `flotar-der ${duracion}s linear forwards`;
                 }
                 
-                document.body.appendChild(corazon);
+                document.body.appendChild(particula);
 
                 setTimeout(() => {
-                    corazon.remove();
+                    particula.remove();
                 }, duracion * 1000);
-            }, 400); 
+            }, 350); 
+        }
+
+        function crearExplosionFinal() {
+            for(let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    const c = document.createElement('div');
+                    c.classList.add('explosion');
+                    c.innerHTML = Math.random() > 0.5 ? '❤️' : '✨';
+                    
+                    let angulo = Math.random() * Math.PI * 2;
+                    let distancia = Math.random() * 200 + 50; 
+                    let tx = Math.cos(angulo) * distancia + 'px';
+                    let ty = Math.sin(angulo) * distancia + 'px';
+                    let rot = Math.random() * 360 + 'deg';
+
+                    c.style.setProperty('--tx', tx);
+                    c.style.setProperty('--ty', ty);
+                    c.style.setProperty('--rot', rot);
+                    c.style.fontSize = (Math.random() * 25 + 15) + 'px';
+
+                    document.body.appendChild(c);
+
+                    setTimeout(() => c.remove(), 2000);
+                }, i * 30); 
+            }
         }
     </script>
 </body>
