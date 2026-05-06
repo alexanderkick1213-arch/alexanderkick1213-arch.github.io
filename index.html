@@ -2,25 +2,23 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- Ajuste crucial para iPhone: Evita que la pantalla haga zoom accidentalmente -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Feliz Primer Mes Mi Amor ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* Diseño General */
+        /* Ajuste crucial para Safari en iOS */
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
-            /* dvh es especial para que Safari en iPhone no corte la pantalla */
-            height: 100vh;
-            height: 100dvh; 
+            height: 100%;
+            height: -webkit-fill-available; /* Truco de oro para Safari iOS */
             font-family: 'Quicksand', sans-serif;
             background: linear-gradient(135deg, #ffb3c6, #ffc8dd, #ffafcc, #bde0fe);
             background-size: 400% 400%;
             animation: moverFondo 15s ease infinite;
-            overflow: hidden; /* Oculta todo lo que salga de la pantalla */
+            overflow: hidden; 
             color: #333;
         }
 
@@ -30,14 +28,13 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Animación de Corazones Flotantes */
         .corazon {
             position: fixed;
             color: rgba(255, 77, 77, 0.8);
             z-index: -1;
             bottom: -10vh;
             filter: drop-shadow(0 0 5px rgba(255,0,0,0.3));
-            pointer-events: none; /* Evita que los corazones bloqueen los clics en iPhone */
+            pointer-events: none; 
         }
 
         @keyframes flotar-izq {
@@ -52,7 +49,6 @@
             100% { transform: translateY(-120vh) translateX(80px) scale(1.5) rotate(20deg); opacity: 0; }
         }
 
-        /* Pantallas compartidas */
         #pantalla-inicio, #pantalla-carta {
             display: flex;
             justify-content: center;
@@ -73,7 +69,6 @@
             transition: opacity 0.8s ease;
         }
 
-        /* Botón Principal Animado */
         .btn-principal {
             background: linear-gradient(45deg, #ff4d4d, #ff758c);
             color: white;
@@ -86,7 +81,7 @@
             cursor: pointer;
             box-shadow: 0 8px 25px rgba(255, 77, 77, 0.5);
             animation: latido 1.5s infinite;
-            -webkit-tap-highlight-color: transparent; /* Quita el destello gris en iPhone al tocar */
+            -webkit-tap-highlight-color: transparent; 
         }
 
         @keyframes latido {
@@ -95,7 +90,6 @@
             100% { transform: scale(1); }
         }
 
-        /* Carta Animada */
         .carta-contenedor {
             position: relative;
             cursor: pointer;
@@ -104,7 +98,7 @@
 
         .sobre {
             position: relative;
-            width: 280px; /* Un poco más chico para que no choque en iPhone */
+            width: 280px; 
             height: 180px;
             background-color: #ff4d4d;
             border-radius: 10px;
@@ -177,7 +171,6 @@
             animation: latido 1.5s infinite;
         }
 
-        /* Reproductor de Música */
         #reproductor {
             display: none;
             position: fixed;
@@ -185,8 +178,8 @@
             left: 50%;
             transform: translateX(-50%);
             width: 85%;
-            max-width: 300px;
-            background: rgba(255, 255, 255, 0.7);
+            max-width: 320px;
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             padding: 10px;
@@ -227,18 +220,22 @@
             accent-color: #ff4d4d;
         }
 
-        /* Pantalla de las Fotos */
+        /* Pantalla Historia - AHORA PERMITE SCROLL */
         #pantalla-historia {
             display: none;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start; /* Para que empiece desde arriba y baje */
             height: 100%;
             width: 100%;
             padding: 15px;
-            padding-top: 90px;
+            padding-top: 110px; /* Espacio para el reproductor */
+            padding-bottom: 100px; /* Cojín gigante abajo para la barra de iPhone */
             box-sizing: border-box;
             z-index: 10;
+            overflow-y: auto; /* Permite deslizar hacia abajo */
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch; /* Scroll suave en iPhone */
         }
 
         .tarjeta {
@@ -246,7 +243,7 @@
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            padding: 15px;
+            padding: 20px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             border: 1px solid rgba(255, 255, 255, 0.5);
@@ -254,9 +251,7 @@
             max-width: 400px;
             text-align: center;
             box-sizing: border-box;
-            /* Para que si el texto es muy largo en celular, se pueda hacer scroll dentro de la tarjeta */
-            max-height: 75vh;
-            overflow-y: auto; 
+            margin-bottom: 20px; /* Espacio entre tarjeta y botones */
         }
 
         .tarjeta.activa {
@@ -278,13 +273,13 @@
 
         .tarjeta img {
             width: 100%;
-            height: 220px; /* Más pequeño para que quepa bien en celular */
+            height: 190px; /* Imagen un poco más pequeña para ahorrar espacio */
             object-fit: cover;
             display: block;
         }
 
         .tarjeta p {
-            font-size: 16px; /* Texto un poquito más ajustado */
+            font-size: 16px; 
             line-height: 1.5;
             margin-bottom: 10px;
             color: #444;
@@ -303,32 +298,39 @@
             justify-content: space-between;
             width: 100%;
             max-width: 400px;
-            margin-top: 15px;
             gap: 10px;
+            margin-bottom: 40px; /* Extra espacio abajo */
         }
 
         .controles-fotos button {
             background: linear-gradient(45deg, #ff758c, #ff4d4d);
             color: white;
             border: none;
-            padding: 12px 20px;
-            font-size: 15px;
+            padding: 14px 20px;
+            font-size: 16px;
             font-family: 'Quicksand', sans-serif;
             font-weight: 600;
             border-radius: 25px;
-            flex: 1; /* Para que los botones ocupen el mismo ancho */
+            flex: 1; 
             -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
         }
 
         .controles-fotos button:disabled {
             background: #ffcccc;
             color: #fff;
             opacity: 0.7;
+            box-shadow: none;
         }
         
-        /* Ajustes específicos para PC (para que no se vea gigante) */
+        /* Ajustes para PC */
         @media (min-width: 768px) {
-            .tarjeta { max-width: 550px; padding: 25px; max-height: 85vh; overflow-y: visible; }
+            #pantalla-historia {
+                justify-content: center;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+            .tarjeta { max-width: 550px; padding: 25px; }
             .tarjeta img { height: 350px; }
             .tarjeta p { font-size: 19px; }
             .sobre { width: 300px; height: 200px; }
@@ -337,22 +339,19 @@
             .papel { width: 260px; height: 160px; }
             #reproductor { top: 20px; left: 20px; transform: none; width: auto; max-width: none; text-align: left; }
             .controles-audio { justify-content: flex-start; }
-            #pantalla-historia { padding-top: 20px; }
-            .controles-fotos { max-width: 550px; }
+            .controles-fotos { max-width: 550px; margin-bottom: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Tu Canción -->
     <audio id="musicaFondo" loop>
         <source src="cancion.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Reproductor de Música -->
     <div id="reproductor">
         <div class="info-cancion">
-            🎵 <span><b>Nombre de tu canción aquí</b></span>
+            🎵 <span><b>Entra en Mi Vida</b></span>
         </div>
         <div class="controles-audio">
             <button id="btn-play-pause" class="btn-audio" onclick="pausarReproducir()">⏸️ Pausar</button>
@@ -360,12 +359,10 @@
         </div>
     </div>
 
-    <!-- Pantalla 1: Inicio -->
     <div id="pantalla-inicio">
         <button class="btn-principal" onclick="empezarSorpresa()">Tengo una sorpresa para ti ❤️</button>
     </div>
 
-    <!-- Pantalla 2: La Carta Animada -->
     <div id="pantalla-carta">
         <div class="carta-contenedor" onclick="abrirCarta()">
             <div class="sobre">
@@ -376,7 +373,6 @@
         <p class="texto-click" id="texto-carta">Toca la carta para abrirla ✨</p>
     </div>
 
-    <!-- Pantalla 3: La galería de fotos con tu texto -->
     <div id="pantalla-historia">
         
         <div class="tarjeta" id="pagina-1">
@@ -435,7 +431,6 @@
                 inicio.style.display = 'none';
                 document.getElementById('pantalla-carta').style.display = 'flex';
                 
-                // Intento de reproducir audio (requerido por iOS al hacer tap)
                 audio.play().catch(e => console.log("Audio en espera de interacción"));
                 crearCorazones();
             }, 400); 
@@ -503,8 +498,8 @@
                 btnSiguiente.innerHTML = 'Siguiente ▶';
             }
             
-            // Hace que la tarjeta vuelva arriba si hay scroll interno en celular
-            document.getElementById('pagina-' + numero).scrollTop = 0;
+            // Subir el scroll de la página al cambiar de foto
+            document.getElementById('pantalla-historia').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function crearCorazones() {
@@ -531,7 +526,7 @@
                 setTimeout(() => {
                     corazon.remove();
                 }, duracion * 1000);
-            }, 400); // Un poco más lento para no saturar la memoria del iPhone
+            }, 400); 
         }
     </script>
 </body>
