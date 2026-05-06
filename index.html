@@ -2,21 +2,25 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Ajuste crucial para iPhone: Evita que la pantalla haga zoom accidentalmente -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Feliz Primer Mes Mi Amor ❤️</title>
-    <!-- Importando fuentes bonitas de Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* Diseño General y Fondo Animado */
-        body {
+        /* Diseño General */
+        html, body {
             margin: 0;
             padding: 0;
+            width: 100%;
+            /* dvh es especial para que Safari en iPhone no corte la pantalla */
+            height: 100vh;
+            height: 100dvh; 
             font-family: 'Quicksand', sans-serif;
             background: linear-gradient(135deg, #ffb3c6, #ffc8dd, #ffafcc, #bde0fe);
             background-size: 400% 400%;
             animation: moverFondo 15s ease infinite;
-            overflow: hidden;
+            overflow: hidden; /* Oculta todo lo que salga de la pantalla */
             color: #333;
         }
 
@@ -33,6 +37,7 @@
             z-index: -1;
             bottom: -10vh;
             filter: drop-shadow(0 0 5px rgba(255,0,0,0.3));
+            pointer-events: none; /* Evita que los corazones bloqueen los clics en iPhone */
         }
 
         @keyframes flotar-izq {
@@ -47,13 +52,14 @@
             100% { transform: translateY(-120vh) translateX(80px) scale(1.5) rotate(20deg); opacity: 0; }
         }
 
-        /* Pantalla de Inicio */
-        #pantalla-inicio {
+        /* Pantallas compartidas */
+        #pantalla-inicio, #pantalla-carta {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            width: 100vw;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
             position: absolute;
             top: 0;
             left: 0;
@@ -61,25 +67,26 @@
             transition: opacity 0.5s;
         }
 
+        #pantalla-carta {
+            display: none;
+            z-index: 20;
+            transition: opacity 0.8s ease;
+        }
+
+        /* Botón Principal Animado */
         .btn-principal {
             background: linear-gradient(45deg, #ff4d4d, #ff758c);
             color: white;
             border: none;
-            padding: 18px 40px;
-            font-size: 22px;
+            padding: 18px 35px;
+            font-size: 20px;
             font-family: 'Quicksand', sans-serif;
             font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 8px 25px rgba(255, 77, 77, 0.5);
             animation: latido 1.5s infinite;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .btn-principal:hover {
-            transform: scale(1.1) translateY(-5px);
-            box-shadow: 0 12px 30px rgba(255, 77, 77, 0.7);
-            animation: none;
+            -webkit-tap-highlight-color: transparent; /* Quita el destello gris en iPhone al tocar */
         }
 
         @keyframes latido {
@@ -88,35 +95,17 @@
             100% { transform: scale(1); }
         }
 
-        /* --- NUEVO: Pantalla de la Carta Animada --- */
-        #pantalla-carta {
-            display: none; /* Oculto al inicio */
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            height: 100vh;
-            width: 100vw;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 20;
-            transition: opacity 0.8s ease;
-        }
-
+        /* Carta Animada */
         .carta-contenedor {
             position: relative;
             cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .carta-contenedor:hover {
-            transform: scale(1.05) translateY(-5px);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .sobre {
             position: relative;
-            width: 300px;
-            height: 200px;
+            width: 280px; /* Un poco más chico para que no choque en iPhone */
+            height: 180px;
             background-color: #ff4d4d;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -125,7 +114,6 @@
             align-items: center;
         }
 
-        /* Tapa del sobre (Triángulo superior) */
         .sobre::before {
             content: '';
             position: absolute;
@@ -133,61 +121,57 @@
             left: 0;
             width: 0;
             height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 100px solid #cc0000;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 90px solid #cc0000;
             transform-origin: top;
             transition: transform 0.6s ease-in-out;
             z-index: 3;
         }
 
-        /* Sombras para dar volumen al sobre */
         .sobre-frente {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 0;
             height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-bottom: 100px solid #ff3333;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-bottom: 90px solid #ff3333;
             z-index: 2;
             border-radius: 0 0 10px 10px;
         }
 
-        /* Papel dentro del sobre */
         .papel {
             position: absolute;
             background-color: #fff9fa;
-            width: 260px;
-            height: 160px;
+            width: 240px;
+            height: 140px;
             top: 20px;
             border-radius: 5px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Dancing Script', cursive;
-            font-size: 28px;
+            font-size: 26px;
             color: #d63031;
             transition: transform 0.8s ease-in-out;
             z-index: 1;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
-        /* Clases activas para cuando se hace clic en la carta */
         .carta-contenedor.abierta .sobre::before {
             transform: rotateX(180deg);
             z-index: 0;
         }
 
         .carta-contenedor.abierta .papel {
-            transform: translateY(-90px); /* El papel sale un poco hacia arriba */
+            transform: translateY(-80px);
         }
 
         .texto-click {
             margin-top: 40px;
             color: #d63031;
-            font-family: 'Quicksand', sans-serif;
             font-weight: bold;
             font-size: 18px;
             animation: latido 1.5s infinite;
@@ -197,29 +181,35 @@
         #reproductor {
             display: none;
             position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.6);
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            max-width: 300px;
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 12px 20px;
+            padding: 10px;
             border-radius: 15px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.4);
             z-index: 40;
+            text-align: center;
+            box-sizing: border-box;
         }
 
         .info-cancion {
             color: #d63031;
             font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 14px;
+            margin-bottom: 8px;
+            font-size: 13px;
         }
 
         .controles-audio {
             display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .btn-audio {
@@ -228,21 +218,13 @@
             border: none;
             padding: 6px 12px;
             border-radius: 10px;
-            cursor: pointer;
             font-family: 'Quicksand', sans-serif;
             font-weight: 600;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .btn-audio:hover {
-            background-color: #ff4d4d;
-            transform: scale(1.05);
         }
 
         input[type="range"] {
-            width: 90px;
+            width: 80px;
             accent-color: #ff4d4d;
-            cursor: pointer;
         }
 
         /* Pantalla de las Fotos */
@@ -251,8 +233,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
+            height: 100%;
+            width: 100%;
+            padding: 15px;
             padding-top: 90px;
             box-sizing: border-box;
             z-index: 10;
@@ -260,60 +243,58 @@
 
         .tarjeta {
             display: none;
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            padding: 25px;
+            padding: 15px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             border: 1px solid rgba(255, 255, 255, 0.5);
-            max-width: 550px;
             width: 100%;
+            max-width: 400px;
             text-align: center;
+            box-sizing: border-box;
+            /* Para que si el texto es muy largo en celular, se pueda hacer scroll dentro de la tarjeta */
+            max-height: 75vh;
+            overflow-y: auto; 
         }
 
         .tarjeta.activa {
             display: block;
-            animation: entrarFlotando 0.8s ease-out forwards;
+            animation: entrarFlotando 0.6s ease-out forwards;
         }
 
         @keyframes entrarFlotando {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .contenedor-imagen {
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 3px solid white;
             overflow: hidden;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border: 4px solid white;
         }
 
         .tarjeta img {
             width: 100%;
-            height: 350px;
+            height: 220px; /* Más pequeño para que quepa bien en celular */
             object-fit: cover;
             display: block;
-            transition: transform 0.5s ease;
-        }
-
-        .tarjeta img:hover {
-            transform: scale(1.08);
         }
 
         .tarjeta p {
-            font-size: 19px;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            font-size: 16px; /* Texto un poquito más ajustado */
+            line-height: 1.5;
+            margin-bottom: 10px;
             color: #444;
         }
 
         .texto-destacado {
             font-family: 'Dancing Script', cursive;
-            font-size: 32px;
+            font-size: 26px;
             color: #d63031;
-            margin-top: 15px;
+            margin-top: 10px;
             display: block;
         }
 
@@ -321,58 +302,43 @@
             display: flex;
             justify-content: space-between;
             width: 100%;
-            max-width: 550px;
-            margin-top: 25px;
+            max-width: 400px;
+            margin-top: 15px;
+            gap: 10px;
         }
 
         .controles-fotos button {
             background: linear-gradient(45deg, #ff758c, #ff4d4d);
             color: white;
             border: none;
-            padding: 12px 25px;
-            font-size: 16px;
+            padding: 12px 20px;
+            font-size: 15px;
             font-family: 'Quicksand', sans-serif;
             font-weight: 600;
             border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
-        }
-
-        .controles-fotos button:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(255, 77, 77, 0.5);
+            flex: 1; /* Para que los botones ocupen el mismo ancho */
+            -webkit-tap-highlight-color: transparent;
         }
 
         .controles-fotos button:disabled {
             background: #ffcccc;
             color: #fff;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
+            opacity: 0.7;
         }
         
-        @media (max-width: 600px) {
-            #reproductor {
-                top: 15px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 85%;
-                text-align: center;
-                padding: 10px;
-            }
-            .controles-audio {
-                justify-content: center;
-            }
-            #pantalla-historia {
-                padding-top: 120px;
-            }
-            .tarjeta img {
-                height: 280px;
-            }
-            .tarjeta p {
-                font-size: 17px;
-            }
+        /* Ajustes específicos para PC (para que no se vea gigante) */
+        @media (min-width: 768px) {
+            .tarjeta { max-width: 550px; padding: 25px; max-height: 85vh; overflow-y: visible; }
+            .tarjeta img { height: 350px; }
+            .tarjeta p { font-size: 19px; }
+            .sobre { width: 300px; height: 200px; }
+            .sobre::before { border-left-width: 150px; border-right-width: 150px; border-top-width: 100px; }
+            .sobre-frente { border-left-width: 150px; border-right-width: 150px; border-bottom-width: 100px; }
+            .papel { width: 260px; height: 160px; }
+            #reproductor { top: 20px; left: 20px; transform: none; width: auto; max-width: none; text-align: left; }
+            .controles-audio { justify-content: flex-start; }
+            #pantalla-historia { padding-top: 20px; }
+            .controles-fotos { max-width: 550px; }
         }
     </style>
 </head>
@@ -390,7 +356,7 @@
         </div>
         <div class="controles-audio">
             <button id="btn-play-pause" class="btn-audio" onclick="pausarReproducir()">⏸️ Pausar</button>
-            <input type="range" id="volumen" min="0" max="1" step="0.1" value="0.8" onchange="cambiarVolumen()" title="Volumen">
+            <input type="range" id="volumen" min="0" max="1" step="0.1" value="0.8" onchange="cambiarVolumen()">
         </div>
     </div>
 
@@ -461,53 +427,40 @@
         let audio = document.getElementById('musicaFondo');
         audio.volume = 0.8;
 
-        // Paso 1: Del Botón de inicio a la Carta
         function empezarSorpresa() {
             let inicio = document.getElementById('pantalla-inicio');
             inicio.style.opacity = '0';
             
             setTimeout(() => {
                 inicio.style.display = 'none';
-                
-                // Mostramos la carta
                 document.getElementById('pantalla-carta').style.display = 'flex';
                 
-                // Empezamos la música y los corazones de fondo para crear ambiente
-                audio.play();
+                // Intento de reproducir audio (requerido por iOS al hacer tap)
+                audio.play().catch(e => console.log("Audio en espera de interacción"));
                 crearCorazones();
-            }, 500); 
+            }, 400); 
         }
 
-        // Paso 2: Abrir la Carta y pasar a la Historia
         function abrirCarta() {
             let contenedor = document.querySelector('.carta-contenedor');
-            
-            // Evitar que haga clic dos veces
             if(contenedor.classList.contains('abierta')) return; 
 
-            // Añadimos la clase para que haga la animación de abrir
             contenedor.classList.add('abierta');
-            
-            // Escondemos el texto de "Toca la carta"
             document.getElementById('texto-carta').style.opacity = '0';
 
-            // Esperamos a que la animación de la carta termine (1.5 segundos) para hacer la transición
             setTimeout(() => {
                 let pantallaCarta = document.getElementById('pantalla-carta');
-                pantallaCarta.style.opacity = '0'; // Se desvanece la carta
+                pantallaCarta.style.opacity = '0'; 
                 
                 setTimeout(() => {
-                    pantallaCarta.style.display = 'none'; // Desaparece por completo
-                    
-                    // Mostramos la galería y el reproductor de música
+                    pantallaCarta.style.display = 'none'; 
                     document.getElementById('pantalla-historia').style.display = 'flex';
                     document.getElementById('reproductor').style.display = 'block';
                     mostrarPagina(paginaActual);
-                }, 800);
-            }, 1800); // Tiempo para apreciar cómo sale el papelito
+                }, 600);
+            }, 1600); 
         }
 
-        // Lógicas de la música
         function pausarReproducir() {
             let btn = document.getElementById('btn-play-pause');
             if (audio.paused) {
@@ -524,7 +477,6 @@
             audio.volume = slider.value;
         }
 
-        // Lógicas de cambio de página
         function cambiarPagina(direccion) {
             document.getElementById('pagina-' + paginaActual).classList.remove('activa');
             paginaActual += direccion;
@@ -550,9 +502,11 @@
                 btnSiguiente.disabled = false;
                 btnSiguiente.innerHTML = 'Siguiente ▶';
             }
+            
+            // Hace que la tarjeta vuelva arriba si hay scroll interno en celular
+            document.getElementById('pagina-' + numero).scrollTop = 0;
         }
 
-        // Animación de los corazones
         function crearCorazones() {
             setInterval(function() {
                 const corazon = document.createElement('div');
@@ -577,7 +531,7 @@
                 setTimeout(() => {
                     corazon.remove();
                 }, duracion * 1000);
-            }, 300);
+            }, 400); // Un poco más lento para no saturar la memoria del iPhone
         }
     </script>
 </body>
