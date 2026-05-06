@@ -3,108 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para mi Polola ❤️</title>
+    <title>Feliz Primer Mes ❤️</title>
     <style>
-        /* Aquí va el diseño (CSS) */
+        /* Diseño General */
         body {
-            background-color: #ffe6e6; /* Un color de fondo rosado suave */
-            font-family: 'Arial', sans-serif;
-            text-align: center;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            background-color: #ffe6e6; /* Fondo rosado suave */
+            overflow: hidden; /* Evita que la pantalla se mueva por los corazones */
         }
-        .container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 600px;
-            width: 90%;
-        }
-        h1 {
+
+        /* Animación de Corazones Flotantes */
+        .corazon {
+            position: fixed;
             color: #ff4d4d;
+            font-size: 24px;
+            animation: flotar linear infinite;
+            z-index: -1; /* Para que queden detrás del contenido */
         }
-        p {
-            color: #555;
-            line-height: 1.6;
-            font-size: 18px;
+
+        @keyframes flotar {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
-        .foto-container {
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            margin: 20px auto;
-            overflow: hidden;
-            border: 5px solid #ff4d4d;
-            background-color: #ffcccc;
+
+        /* Pantalla de Inicio */
+        #pantalla-inicio {
             display: flex;
-            align-items: center;
             justify-content: center;
-            color: #fff;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
         }
-        .foto-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .btn-sorpresa {
+
+        /* Botones */
+        button {
             background-color: #ff4d4d;
             color: white;
             border: none;
             padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 25px;
+            font-size: 20px;
+            border-radius: 30px;
             cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.4);
+            transition: transform 0.2s, background-color 0.3s;
         }
-        .btn-sorpresa:hover {
+        
+        button:hover {
             background-color: #cc0000;
+            transform: scale(1.05);
         }
-        #mensaje-oculto {
-            display: none;
+
+        button:disabled {
+            background-color: #ffb3b3;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Pantalla de las Fotos (Libro/Slider) */
+        #pantalla-historia {
+            display: none; /* Oculto hasta que se presione el botón */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .tarjeta {
+            display: none; /* Se ocultan todas y solo se muestra una a la vez por JS */
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Imágenes adaptables para PC y Celular */
+        .tarjeta img {
+            width: 100%;
+            height: 300px; /* Altura fija para mantener el formato */
+            object-fit: cover; /* Para que la foto no se deforme */
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 3px solid #ffcccc;
+        }
+
+        .tarjeta p {
+            color: #444;
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .controles {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 500px;
             margin-top: 20px;
-            font-size: 22px;
-            color: #cc0000;
-            font-weight: bold;
+        }
+
+        .controles button {
+            font-size: 16px;
+            padding: 10px 20px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- El título principal -->
-        <h1>¡Hola, hermosa! ❤️</h1>
+    <!-- Tu Canción (Asegúrate de que se llame cancion.mp3) -->
+    <audio id="musicaFondo" loop>
+        <source src="cancion.mp3" type="audio/mpeg">
+    </audio>
 
-        <!-- Reemplaza "tu-foto.jpg" con el nombre real de tu foto -->
-        <div class="foto-container">
-            <img src="tu-foto.jpg" alt="Nuestra foto favorita" onerror="this.style.display='none'; this.parentNode.innerHTML='Falta agregar la foto'">
+    <!-- Pantalla 1: Solo el botón -->
+    <div id="pantalla-inicio">
+        <button onclick="empezarSorpresa()">Tengo una sorpresa para ti ❤️</button>
+    </div>
+
+    <!-- Pantalla 2: La galería de fotos con el texto -->
+    <div id="pantalla-historia">
+        
+        <!-- Página 1 -->
+        <div class="tarjeta" id="pagina-1">
+            <img src="foto1.jpg" alt="Foto 1">
+            <p>Aquí puedes escribir la primera parte de tu texto largo. ¡Feliz primer mes! Empezando nuestra historia juntos...</p>
         </div>
 
-        <!-- El mensaje para ella -->
-        <p>Quería hacerte una sorpresa diferente y especial, así que te programé este pequeño rincón en internet solo para nosotros.</p>
-        <p>Eres la mejor polola del mundo y me haces muy feliz.</p>
+        <!-- Página 2 -->
+        <div class="tarjeta" id="pagina-2">
+            <img src="foto2.jpg" alt="Foto 2">
+            <p>Aquí va la segunda parte. Puedes seguir contándole lo mucho que significa para ti o recordar un momento de esta foto.</p>
+        </div>
 
-        <!-- El botón interactivo -->
-        <button class="btn-sorpresa" onclick="mostrarSorpresa()">Haz clic aquí para una sorpresa</button>
+        <!-- Página 3 -->
+        <div class="tarjeta" id="pagina-3">
+            <img src="foto3.jpg" alt="Foto 3">
+            <p>Tercera parte de tu texto. Ya vamos en la mitad de nuestra pequeña galería.</p>
+        </div>
 
-        <!-- El mensaje que aparece al hacer clic -->
-        <div id="mensaje-oculto">
-            ¡Te amo muchísimo! ✨
+        <!-- Página 4 -->
+        <div class="tarjeta" id="pagina-4">
+            <img src="foto4.jpg" alt="Foto 4">
+            <p>Cuarta parte. Sigue expresando todo eso bonito que le preparaste.</p>
+        </div>
+
+        <!-- Página 5 -->
+        <div class="tarjeta" id="pagina-5">
+            <img src="foto5.jpg" alt="Foto 5">
+            <p>Quinta y última parte del texto. Un gran cierre para este primer mes juntos. ¡Te amo!</p>
+        </div>
+
+        <!-- Botones para cambiar de página -->
+        <div class="controles">
+            <button id="btn-anterior" onclick="cambiarPagina(-1)">◀ Anterior</button>
+            <button id="btn-siguiente" onclick="cambiarPagina(1)">Siguiente ▶</button>
         </div>
     </div>
 
     <script>
-        /* Aquí va la interactividad (JavaScript) */
-        function mostrarSorpresa() {
-            document.getElementById('mensaje-oculto').style.display = 'block';
+        let paginaActual = 1;
+        const totalPaginas = 5;
+
+        // Función que arranca todo al hacer clic en la sorpresa
+        function empezarSorpresa() {
+            // 1. Ocultamos el botón inicial
+            document.getElementById('pantalla-inicio').style.display = 'none';
+            
+            // 2. Mostramos la galería
+            document.getElementById('pantalla-historia').style.display = 'flex';
+            mostrarPagina(paginaActual);
+
+            // 3. Reproducimos la música
+            let audio = document.getElementById('musicaFondo');
+            audio.play();
+
+            // 4. Iniciamos la lluvia de corazones
+            crearCorazones();
+        }
+
+        // Lógica para cambiar de página
+        function cambiarPagina(direccion) {
+            paginaActual += direccion;
+            mostrarPagina(paginaActual);
+        }
+
+        function mostrarPagina(numero) {
+            // Ocultamos todas las páginas primero
+            for (let i = 1; i <= totalPaginas; i++) {
+                document.getElementById('pagina-' + i).style.display = 'none';
+            }
+            // Mostramos solo la página actual
+            document.getElementById('pagina-' + numero).style.display = 'block';
+
+            // Desactivamos el botón "Anterior" si estamos en la primera foto
+            document.getElementById('btn-anterior').disabled = (numero === 1);
+            // Desactivamos el botón "Siguiente" si estamos en la última foto
+            document.getElementById('btn-siguiente').disabled = (numero === totalPaginas);
+        }
+
+        // Función para generar corazones en el fondo con movimiento
+        function crearCorazones() {
+            setInterval(function() {
+                const corazon = document.createElement('div');
+                corazon.classList.add('corazon');
+                corazon.innerHTML = '❤️';
+                
+                // Posición horizontal aleatoria
+                corazon.style.left = Math.random() * 100 + 'vw';
+                
+                // Tamaño aleatorio
+                corazon.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                
+                // Duración de la animación aleatoria (entre 3 y 6 segundos)
+                corazon.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                
+                document.body.appendChild(corazon);
+
+                // Eliminar el corazón después de 6 segundos para no saturar el navegador
+                setTimeout(() => {
+                    corazon.remove();
+                }, 6000);
+            }, 300); // Aparece un corazón nuevo cada 300 milisegundos
         }
     </script>
-
 </body>
 </html>
