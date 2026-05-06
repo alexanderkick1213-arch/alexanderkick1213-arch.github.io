@@ -3,29 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feliz Primer Mes ❤️</title>
+    <title>Feliz Primer Mes Mi Amor ❤️</title>
+    <!-- Importando fuentes bonitas de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    
     <style>
-        /* Diseño General */
+        /* Diseño General y Fondo Animado */
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #ffe6e6; /* Fondo rosado suave */
-            overflow: hidden; /* Evita que la pantalla se mueva por los corazones */
+            font-family: 'Quicksand', sans-serif;
+            /* Fondo con degradado animado */
+            background: linear-gradient(135deg, #ffb3c6, #ffc8dd, #ffafcc, #bde0fe);
+            background-size: 400% 400%;
+            animation: moverFondo 15s ease infinite;
+            overflow: hidden;
+            color: #333;
+        }
+
+        @keyframes moverFondo {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* Animación de Corazones Flotantes */
         .corazon {
             position: fixed;
-            color: #ff4d4d;
-            font-size: 24px;
-            animation: flotar linear infinite;
-            z-index: -1; /* Para que queden detrás del contenido */
+            color: rgba(255, 77, 77, 0.8);
+            z-index: -1;
+            bottom: -10vh;
+            filter: drop-shadow(0 0 5px rgba(255,0,0,0.3));
         }
 
-        @keyframes flotar {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        @keyframes flotar-izq {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-120vh) translateX(-80px) scale(1.5) rotate(-20deg); opacity: 0; }
+        }
+
+        @keyframes flotar-der {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-120vh) translateX(80px) scale(1.5) rotate(20deg); opacity: 0; }
         }
 
         /* Pantalla de Inicio */
@@ -41,131 +61,292 @@
             z-index: 10;
         }
 
-        /* Botones */
-        button {
-            background-color: #ff4d4d;
+        /* Botón Principal Animado */
+        .btn-principal {
+            background: linear-gradient(45deg, #ff4d4d, #ff758c);
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 20px;
-            border-radius: 30px;
+            padding: 18px 40px;
+            font-size: 22px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.4);
-            transition: transform 0.2s, background-color 0.3s;
+            box-shadow: 0 8px 25px rgba(255, 77, 77, 0.5);
+            animation: latido 1.5s infinite;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
         
-        button:hover {
-            background-color: #cc0000;
+        .btn-principal:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 77, 77, 0.7);
+            animation: none; /* Se detiene el latido al pasar el mouse */
+        }
+
+        @keyframes latido {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Reproductor de Música */
+        #reproductor {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            /* Efecto Cristal */
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            z-index: 20;
+        }
+
+        .info-cancion {
+            color: #d63031;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .controles-audio {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-audio {
+            background-color: #ff758c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn-audio:hover {
+            background-color: #ff4d4d;
             transform: scale(1.05);
         }
 
-        button:disabled {
-            background-color: #ffb3b3;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        input[type="range"] {
+            width: 90px;
+            accent-color: #ff4d4d;
+            cursor: pointer;
         }
 
-        /* Pantalla de las Fotos (Libro/Slider) */
+        /* Pantalla de las Fotos */
         #pantalla-historia {
-            display: none; /* Oculto hasta que se presione el botón */
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
+            padding-top: 90px; /* Espacio para el reproductor */
             box-sizing: border-box;
         }
 
         .tarjeta {
-            display: none; /* Se ocultan todas y solo se muestra una a la vez por JS */
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            max-width: 500px;
+            display: none;
+            /* Efecto Cristal para las tarjetas */
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            max-width: 550px;
             width: 100%;
             text-align: center;
         }
 
-        /* Imágenes adaptables para PC y Celular */
+        /* Animación suave al cambiar de página */
+        .tarjeta.activa {
+            display: block;
+            animation: entrarFlotando 0.8s ease-out forwards;
+        }
+
+        @keyframes entrarFlotando {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Imágenes con efecto zoom */
+        .contenedor-imagen {
+            overflow: hidden;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 4px solid white;
+        }
+
         .tarjeta img {
             width: 100%;
-            height: 300px; /* Altura fija para mantener el formato */
-            object-fit: cover; /* Para que la foto no se deforme */
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 3px solid #ffcccc;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
         }
 
+        .tarjeta img:hover {
+            transform: scale(1.08);
+        }
+
+        /* Textos */
         .tarjeta p {
-            color: #444;
-            font-size: 18px;
-            line-height: 1.5;
+            font-size: 19px;
+            line-height: 1.6;
             margin-bottom: 20px;
+            color: #444;
         }
 
-        .controles {
+        .texto-destacado {
+            font-family: 'Dancing Script', cursive;
+            font-size: 32px;
+            color: #d63031;
+            margin-top: 15px;
+            display: block;
+        }
+
+        /* Controles de cambio de foto */
+        .controles-fotos {
             display: flex;
             justify-content: space-between;
             width: 100%;
-            max-width: 500px;
-            margin-top: 20px;
+            max-width: 550px;
+            margin-top: 25px;
         }
 
-        .controles button {
+        .controles-fotos button {
+            background: linear-gradient(45deg, #ff758c, #ff4d4d);
+            color: white;
+            border: none;
+            padding: 12px 25px;
             font-size: 16px;
-            padding: 10px 20px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+        }
+
+        .controles-fotos button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 77, 77, 0.5);
+        }
+
+        .controles-fotos button:disabled {
+            background: #ffcccc;
+            color: #fff;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        
+        /* Ajuste para celulares */
+        @media (max-width: 600px) {
+            #reproductor {
+                top: 15px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 85%;
+                text-align: center;
+                padding: 10px;
+            }
+            .controles-audio {
+                justify-content: center;
+            }
+            #pantalla-historia {
+                padding-top: 120px;
+            }
+            .tarjeta img {
+                height: 280px;
+            }
+            .tarjeta p {
+                font-size: 17px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Tu Canción (Asegúrate de que se llame cancion.mp3) -->
+    <!-- Tu Canción -->
     <audio id="musicaFondo" loop>
         <source src="cancion.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Pantalla 1: Solo el botón -->
-    <div id="pantalla-inicio">
-        <button onclick="empezarSorpresa()">Tengo una sorpresa para ti ❤️</button>
+    <!-- Reproductor de Música -->
+    <div id="reproductor">
+        <div class="info-cancion">
+            🎵 <span><b>Nombre de tu canción aquí</b></span>
+        </div>
+        <div class="controles-audio">
+            <button id="btn-play-pause" class="btn-audio" onclick="pausarReproducir()">⏸️ Pausar</button>
+            <input type="range" id="volumen" min="0" max="1" step="0.1" value="0.8" onchange="cambiarVolumen()" title="Volumen">
+        </div>
     </div>
 
-    <!-- Pantalla 2: La galería de fotos con el texto -->
+    <!-- Pantalla 1: Inicio -->
+    <div id="pantalla-inicio">
+        <button class="btn-principal" onclick="empezarSorpresa()">Tengo una sorpresa para ti ❤️</button>
+    </div>
+
+    <!-- Pantalla 2: La galería de fotos con tu texto -->
     <div id="pantalla-historia">
         
         <!-- Página 1 -->
         <div class="tarjeta" id="pagina-1">
-            <img src="foto1.jpg" alt="Foto 1">
-            <p>Aquí puedes escribir la primera parte de tu texto largo. ¡Feliz primer mes! Empezando nuestra historia juntos...</p>
+            <div class="contenedor-imagen">
+                <img src="foto1.jpg" alt="Nuestro primer mes">
+            </div>
+            <p>Hola mi amor,<br><br>Hoy cumplimos nuestro primer mes juntos, y quise escribirte esto porque de verdad has sido algo muy especial en mi vida. En este tiempo me has hecho sentir una felicidad que no esperaba, y cada día contigo se vuelve distinto, mejor.</p>
         </div>
 
         <!-- Página 2 -->
         <div class="tarjeta" id="pagina-2">
-            <img src="foto2.jpg" alt="Foto 2">
-            <p>Aquí va la segunda parte. Puedes seguir contándole lo mucho que significa para ti o recordar un momento de esta foto.</p>
+            <div class="contenedor-imagen">
+                <img src="foto2.jpg" alt="Me encanta todo de ti">
+            </div>
+            <p>Me encanta todo de ti, pero más que solo cómo eres por fuera, me encanta tu forma de ser, cómo me haces sentir cuando estoy contigo, tu risa, tus detalles, esas pequeñas cosas que te hacen única.</p>
         </div>
 
         <!-- Página 3 -->
         <div class="tarjeta" id="pagina-3">
-            <img src="foto3.jpg" alt="Foto 3">
-            <p>Tercera parte de tu texto. Ya vamos en la mitad de nuestra pequeña galería.</p>
+            <div class="contenedor-imagen">
+                <img src="foto3.jpg" alt="Completamente enamorado">
+            </div>
+            <p>Aún así, no puedo negar que tus ojitos, tu sonrisa y tus pequitas me tienen completamente enamorado.<br><br>Quiero que sepas que para mí esto no es algo pasajero...</p>
         </div>
 
         <!-- Página 4 -->
         <div class="tarjeta" id="pagina-4">
-            <img src="foto4.jpg" alt="Foto 4">
-            <p>Cuarta parte. Sigue expresando todo eso bonito que le preparaste.</p>
+            <div class="contenedor-imagen">
+                <img src="foto4.jpg" alt="Acompañarte en tus sueños">
+            </div>
+            <p>No quiero que sea solo un mes o unos cuantos más... quiero que esto crezca, que sigamos compartiendo momentos, riéndonos juntos y estando el uno para el otro.<br><br>Me hace feliz pensar en acompañarte en tus sueños y verte cumplir cada uno de ellos, porque uno de los míos es justamente ese: verte feliz.</p>
         </div>
 
         <!-- Página 5 -->
         <div class="tarjeta" id="pagina-5">
-            <img src="foto5.jpg" alt="Foto 5">
-            <p>Quinta y última parte del texto. Un gran cierre para este primer mes juntos. ¡Te amo!</p>
+            <div class="contenedor-imagen">
+                <img src="foto5.jpg" alt="Te amo con todo mi corazón">
+            </div>
+            <p>Gracias por este primer mes, por cada momento y por todo lo que hemos vivido hasta ahora. De verdad espero que esto siga creciendo y que vengan muchos meses más a tu lado.</p>
+            <span class="texto-destacado">Te amo con todo mi corazón.</span>
         </div>
 
-        <!-- Botones para cambiar de página -->
-        <div class="controles">
+        <!-- Controles Inferiores -->
+        <div class="controles-fotos">
             <button id="btn-anterior" onclick="cambiarPagina(-1)">◀ Anterior</button>
             <button id="btn-siguiente" onclick="cambiarPagina(1)">Siguiente ▶</button>
         </div>
@@ -174,67 +355,101 @@
     <script>
         let paginaActual = 1;
         const totalPaginas = 5;
+        let audio = document.getElementById('musicaFondo');
+        
+        // Ajustamos el volumen inicial para que no suene tan fuerte de golpe
+        audio.volume = 0.8;
 
-        // Función que arranca todo al hacer clic en la sorpresa
         function empezarSorpresa() {
-            // 1. Ocultamos el botón inicial
-            document.getElementById('pantalla-inicio').style.display = 'none';
-            
-            // 2. Mostramos la galería
-            document.getElementById('pantalla-historia').style.display = 'flex';
-            mostrarPagina(paginaActual);
-
-            // 3. Reproducimos la música
-            let audio = document.getElementById('musicaFondo');
-            audio.play();
-
-            // 4. Iniciamos la lluvia de corazones
-            crearCorazones();
+            // Ocultar inicio con un efecto
+            let inicio = document.getElementById('pantalla-inicio');
+            inicio.style.opacity = '0';
+            setTimeout(() => {
+                inicio.style.display = 'none';
+                
+                // Mostrar lo demás
+                document.getElementById('pantalla-historia').style.display = 'flex';
+                document.getElementById('reproductor').style.display = 'block';
+                mostrarPagina(paginaActual);
+                
+                audio.play();
+                crearCorazones();
+            }, 500); // Espera medio segundo a que se desvanezca
         }
 
-        // Lógica para cambiar de página
+        function pausarReproducir() {
+            let btn = document.getElementById('btn-play-pause');
+            if (audio.paused) {
+                audio.play();
+                btn.innerHTML = '⏸️ Pausar';
+            } else {
+                audio.pause();
+                btn.innerHTML = '▶️ Play';
+            }
+        }
+
+        function cambiarVolumen() {
+            let slider = document.getElementById('volumen');
+            audio.volume = slider.value;
+        }
+
         function cambiarPagina(direccion) {
+            // Primero quitamos la clase activa para que desaparezca
+            document.getElementById('pagina-' + paginaActual).classList.remove('activa');
+            
             paginaActual += direccion;
-            mostrarPagina(paginaActual);
+            
+            // Un pequeño retraso para que se note la animación de entrada
+            setTimeout(() => {
+                mostrarPagina(paginaActual);
+            }, 50);
         }
 
         function mostrarPagina(numero) {
-            // Ocultamos todas las páginas primero
             for (let i = 1; i <= totalPaginas; i++) {
-                document.getElementById('pagina-' + i).style.display = 'none';
+                document.getElementById('pagina-' + i).classList.remove('activa');
             }
-            // Mostramos solo la página actual
-            document.getElementById('pagina-' + numero).style.display = 'block';
-
-            // Desactivamos el botón "Anterior" si estamos en la primera foto
+            document.getElementById('pagina-' + numero).classList.add('activa');
+            
             document.getElementById('btn-anterior').disabled = (numero === 1);
-            // Desactivamos el botón "Siguiente" si estamos en la última foto
-            document.getElementById('btn-siguiente').disabled = (numero === totalPaginas);
+            
+            // Si llegamos al final, cambiamos el texto del botón
+            let btnSiguiente = document.getElementById('btn-siguiente');
+            if (numero === totalPaginas) {
+                btnSiguiente.disabled = true;
+                btnSiguiente.innerHTML = 'Fin ❤️';
+            } else {
+                btnSiguiente.disabled = false;
+                btnSiguiente.innerHTML = 'Siguiente ▶';
+            }
         }
 
-        // Función para generar corazones en el fondo con movimiento
         function crearCorazones() {
             setInterval(function() {
                 const corazon = document.createElement('div');
                 corazon.classList.add('corazon');
-                corazon.innerHTML = '❤️';
                 
-                // Posición horizontal aleatoria
+                // Variamos los emojis de corazones para que se vea más lindo
+                const corazones = ['❤️', '💖', '💕', '✨'];
+                corazon.innerHTML = corazones[Math.floor(Math.random() * corazones.length)];
+                
                 corazon.style.left = Math.random() * 100 + 'vw';
+                corazon.style.fontSize = (Math.random() * 20 + 15) + 'px';
                 
-                // Tamaño aleatorio
-                corazon.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                let duracion = Math.random() * 4 + 5; // Entre 5 y 9 segundos
                 
-                // Duración de la animación aleatoria (entre 3 y 6 segundos)
-                corazon.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                if (Math.random() > 0.5) {
+                    corazon.style.animation = `flotar-izq ${duracion}s linear forwards`;
+                } else {
+                    corazon.style.animation = `flotar-der ${duracion}s linear forwards`;
+                }
                 
                 document.body.appendChild(corazon);
 
-                // Eliminar el corazón después de 6 segundos para no saturar el navegador
                 setTimeout(() => {
                     corazon.remove();
-                }, 6000);
-            }, 300); // Aparece un corazón nuevo cada 300 milisegundos
+                }, duracion * 1000);
+            }, 300);
         }
     </script>
 </body>
